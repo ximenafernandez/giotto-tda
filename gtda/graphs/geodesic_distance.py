@@ -294,7 +294,9 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
             X = X.copy() if isspmatrix_csr(X) else X.tocsr()
             X.resize(n_vertices, n_vertices)
 
-        return (shortest_path(X ** self.weight, method=method_)) ** (1 / self.weight)
+        return (shortest_path(X.power(self.weight),
+                              method=method_,
+                              directed=False)) ** (1 / self.weight)
 
     def fit(self, X, y=None):
         """Do nothing and return the estimator unchanged.
