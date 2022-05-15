@@ -220,7 +220,6 @@ class GraphGeodesicDistance(BaseEstimator, TransformerMixin, PlotterMixin):
             )
 
 
-@adapt_fit_transform_docs
 class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
     """Distance matrices arising from geodesic distances on graphs.
 
@@ -293,10 +292,8 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
             n_vertices = max(X.shape)
             X = X.copy() if isspmatrix_csr(X) else X.tocsr()
             X.resize(n_vertices, n_vertices)
-
-        return (shortest_path(X.power(self.weight),
-                              method=method_,
-                              directed=False)) ** (1 / self.weight)
+        
+        return (shortest_path(X.power(self.weight), method='D', directed = False)) #** (1 / self.weight)
 
     def fit(self, X, y=None):
         """Do nothing and return the estimator unchanged.
@@ -395,6 +392,6 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
         """
         return plot_heatmap(
             Xt[sample], colorscale=colorscale,
-            title=f"{sample}-th geodesic distance matrix",
+            title=f"{sample}-th Fermat distance matrix",
             plotly_params=plotly_params
             )
