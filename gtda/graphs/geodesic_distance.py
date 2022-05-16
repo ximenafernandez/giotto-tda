@@ -82,7 +82,7 @@ class GraphGeodesicDistance(BaseEstimator, TransformerMixin, PlotterMixin):
     See also
     --------
     TransitionGraph, KNeighborsGraph, FermatDistance
-    
+
     """
 
     def __init__(self, n_jobs=None, directed=False, unweighted=False,
@@ -246,7 +246,7 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
         processors.
 
     p : float or None, optional, defaul: ``2.``
-        Parameter on the Fermat distance. Changes the weight of every edge 
+        Parameter on the Fermat distance. Changes the weight of every edge
         raising it to the power p.
 
     method : ``'auto'`` | ``'FW'`` | ``'D'`` | ``'BF'`` | ``'J'``, optional, \
@@ -270,7 +270,7 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
        [0.34687665, 0.42763085, 0.        , 0.42066907],
        [0.63919058, 0.59881392, 0.42066907, 0.        ]])
     >>> from gtda.graphs import FermatDistance
-    >>> FD = FermatDistance()           
+    >>> FD = FermatDistance()
     >>> FD.fit_transform(x_symm[None, :, :])
     array([[[0.        , 0.30319156, 0.12032341, 0.29728588],
         [0.30319156, 0.        , 0.18286815, 0.35857811],
@@ -282,13 +282,12 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
                         [1,0]])
     >>> kNN = KNeighborsGraph(n_neighbors=3, mode = 'distance')
     >>> X_kNN = kNN.fit_transform(point_cloud[None,:,:])
-    >>> FD = FermatDistance()           
+    >>> FD = FermatDistance()
     >>> FD_matrix = FD.fit_transform_plot(X_kNN)
     array([[[0., 4., 2., 2.],
         [4., 0., 2., 2.],
         [2., 2., 0., 4.],
         [2., 2., 4., 0.]]])
-    
 
     See also
     --------
@@ -316,17 +315,17 @@ class FermatDistance(BaseEstimator, TransformerMixin, PlotterMixin):
                         f"some edge weights are zero. Using '{method_}' "
                         f"instead for graph {i}."
                         )
-            #if not isinstance(X, MaskedArray):
+            if not isinstance(X, MaskedArray):
                 # Convert to a masked array with mask given by positions in
                 # which infs or NaNs occur.
-            #    if X.dtype != bool:
-            #        X = masked_invalid(X)
+                if X.dtype != bool:
+                    X = masked_invalid(X)
         elif X.shape[0] != X.shape[1]:
             n_vertices = max(X.shape)
             X = X.copy() if isspmatrix_csr(X) else X.tocsr()
             X.resize(n_vertices, n_vertices)
-        X = csr_matrix(X) # Convert to a compressed sparse row matrix
-        return shortest_path(X.power(self.p), method='D', directed = False)
+        X = csr_matrix(X)  # Convert to a compressed sparse row matrix
+        return shortest_path(X.power(self.p), method='D', directed=False)
 
     def fit(self, X, y=None):
         """Do nothing and return the estimator unchanged.
